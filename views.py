@@ -41,7 +41,7 @@ def my_channel_only(func):
 
 botkayo = BotKayO(
     player_list=PLAYERS,
-    channel_id=DEV_CHANNEL,  # DEV_CHANNEL / PROD_CHANNEL
+    channel_id=PROD_CHANNEL,  # DEV_CHANNEL / PROD_CHANNEL
 )
 
 
