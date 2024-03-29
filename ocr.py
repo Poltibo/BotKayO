@@ -24,15 +24,3 @@ def compute_img(filename):
     text_inv = text_inv[text_inv.conf != -1]
 
     return text_inv
-
-
-if __name__ == "__main__":
-    players_ordered = []
-    leaderboard = compute_img("data/img/image_name.jpg")
-
-    for index, row in leaderboard.iterrows():
-        for player in PLAYERS:
-            if SequenceMatcher(a=row["text"], b=player).ratio() > 0.6:
-                players_ordered.append(player)
-
-    print(players_ordered)
