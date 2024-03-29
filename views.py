@@ -1,10 +1,11 @@
 import logging
+import random
 
 import discord
 import requests
 from discord.ext import commands
 
-from constants import PLAYERS, PODIUM_EMOJIS, DEV_CHANNEL
+from constants import PLAYERS, PODIUM_EMOJIS, DEV_CHANNEL, SPRAYS, PLAYER_AGENTS
 from core import (
     get_ranks_from_image,
     update_score,
@@ -58,20 +59,24 @@ class Button(discord.ui.View):
 
 @botkayo.event
 async def on_message(message):
-    if message.attachments and message.channel.id == botkayo.channel_id:
+    if (
+        message.attachments
+        and message.channel.id == botkayo.channel_id
+        and not message.author.bot
+    ):
         img_data = requests.get(message.attachments[0].url).content
 
         with open("data/img/last_game.jpg", "wb") as handler:
             handler.write(img_data)
 
-        embedVar = discord.Embed(
-            title=f"Classement :",
-            description="Est-ce que c'est correct ? ",
-            color=0x001C81,
-        )
-
         player_ranks = get_ranks_from_image("data/img/last_game.jpg")
         rank = 1
+
+        embedVar = discord.Embed(
+            title=f"Victoire de {player_ranks[0]} !",
+            description="Est-ce que le classement est correct ?",
+            color=0x001C81,
+        )
 
         for player in player_ranks:
             embedVar.add_field(
@@ -87,9 +92,15 @@ async def on_message(message):
             )
             rank += 1
 
-        # embedVar.set_image(url=message.attachments[0].url)
+        spray = random.choice(SPRAYS[PLAYER_AGENTS[player_ranks[0]]]["win"])
+        file = discord.File(spray, filename=spray.split("/")[-1])
+        embedVar.set_thumbnail(url=f"attachment://{spray.split('/')[-1]}")
+
         await message.channel.send(
-            embed=embedVar, view=Button(player_list=player_ranks)
+            embed=embedVar,
+            view=Button(player_list=player_ranks),
+            # file=discord.File(random.choice(SPRAYS["kayo"]["win"])),
+            file=file,
         )
 
     await botkayo.process_commands(message)
@@ -142,7 +153,7 @@ async def ranking(ctx):
         weapons = get_weapons()
         embedVar = discord.Embed()
         embedVar.set_author(name="Classement")
-        # embedVar.set_thumbnail(url=RANKINGS_ICON)
+        embedVar.set_thumbnail(url=SPRAYS["misc"]["rank"])
         rank = 1
         for key in scores.keys():
             embedVar.add_field(
