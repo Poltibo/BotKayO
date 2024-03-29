@@ -1,9 +1,5 @@
 import pytesseract
-import numpy as np
 import cv2
-from difflib import SequenceMatcher
-
-from constants import PLAYERS
 
 
 def compute_img(filename):
