@@ -28,17 +28,6 @@ class BotKayO(commands.Bot):
         super().__init__(intents=intents, command_prefix="!")
 
 
-def my_channel_only(func):
-    def func_wrapper(ctx, *args, **kwargs):
-        logging.info(f"{ctx.channel.id}, {botkayo.channel_id}")
-        if ctx.channel.id == botkayo.channel_id:
-            return func(*args, **kwargs)
-        else:
-            raise ValueError
-
-    return func_wrapper
-
-
 botkayo = BotKayO(player_list=PLAYERS, channel_id=DEV_CHANNEL)
 
 
@@ -106,7 +95,6 @@ async def on_message(message):
     await botkayo.process_commands(message)
 
 
-@my_channel_only
 @botkayo.command(name="next_game")
 async def next_game(ctx, *players):
     if ctx.channel.id == botkayo.channel_id:
@@ -133,7 +121,6 @@ async def next_game(ctx, *players):
         await ctx.send(embed=embedVar)
 
 
-@my_channel_only
 @botkayo.command(name="duel")
 async def duel(ctx, player1, player2):
     if ctx.channel.id == botkayo.channel_id:
@@ -148,7 +135,6 @@ async def duel(ctx, player1, player2):
             )
 
 
-@my_channel_only
 @botkayo.command(name="ranking")
 async def ranking(ctx):
     if ctx.channel.id == botkayo.channel_id:
@@ -174,7 +160,6 @@ async def ranking(ctx):
         await ctx.send(embed=embedVar)
 
 
-@my_channel_only
 @botkayo.command(name="guide")
 async def guide(ctx):
     if ctx.channel.id == botkayo.channel_id:
