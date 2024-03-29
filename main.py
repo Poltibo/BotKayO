@@ -1,6 +1,6 @@
 import logging
 
-from constants import TOKEN
+from constants import TOKEN, DEV_CHANNEL, PROD_CHANNEL
 from views import botkayo
 
 logging.basicConfig(
@@ -11,4 +11,5 @@ logging.basicConfig(
 )
 
 if __name__ == "__main__":
+    botkayo.channel_id = PROD_CHANNEL  # DEV_CHANNEL / PROD_CHANNEL
     botkayo.run(TOKEN)

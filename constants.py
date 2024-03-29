@@ -18,3 +18,13 @@ PLAYERS = [
     "ChokDi",
 ]
 PODIUM_EMOJIS = {"1": "🏆", "2": "🥈", "3": "🥉"}
+
+WEAPONS = {
+    "1": "classic",
+    "2": "ghost",
+    "3": "bucky",
+    "4": "guardian",
+    "5": "vandal",
+    "6": "odin",
+    "7": "operator",
+}

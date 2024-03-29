@@ -4,7 +4,7 @@ import discord
 import requests
 from discord.ext import commands
 
-from constants import PLAYERS, PODIUM_EMOJIS, DEV_CHANNEL, PROD_CHANNEL
+from constants import PLAYERS, PODIUM_EMOJIS, DEV_CHANNEL
 from core import (
     get_ranks_from_image,
     update_score,
@@ -39,10 +39,7 @@ def my_channel_only(func):
     return func_wrapper
 
 
-botkayo = BotKayO(
-    player_list=PLAYERS,
-    channel_id=PROD_CHANNEL,  # DEV_CHANNEL / PROD_CHANNEL
-)
+botkayo = BotKayO(player_list=PLAYERS, channel_id=DEV_CHANNEL)
 
 
 # noinspection PyUnresolvedReferences
@@ -75,7 +72,7 @@ async def on_message(message):
     if message.attachments and message.channel.id == botkayo.channel_id:
         img_data = requests.get(message.attachments[0].url).content
 
-        with open("data/img/image_name.jpg", "wb") as handler:
+        with open("data/img/last_game.jpg", "wb") as handler:
             handler.write(img_data)
 
         embedVar = discord.Embed(
@@ -84,7 +81,7 @@ async def on_message(message):
             color=0x001C81,
         )
 
-        player_ranks = get_ranks_from_image("data/img/image_name.jpg")
+        player_ranks = get_ranks_from_image("data/img/last_game.jpg")
         rank = 1
 
         for player in player_ranks:

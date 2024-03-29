@@ -2,7 +2,7 @@ import json
 import logging
 from difflib import SequenceMatcher
 
-from constants import PLAYERS
+from constants import PLAYERS, WEAPONS
 from ocr import compute_img
 
 
@@ -18,16 +18,13 @@ def get_weapons(players: list[str] = PLAYERS) -> dict[str, str]:
     with open("data/points.json") as fp:
         points = json.load(fp)
 
-    with open("data/weapons.json") as fp:
-        weapons = json.load(fp)
-
     points_rank = {
         key: rank
         for rank, key in enumerate(sorted(set(points.values()), reverse=True), 1)
     }
     rank = {k: points_rank[v] for k, v in points.items()}
     sub_rank = {k: rank[k] for k in rank.keys() if k in players}
-    weapons = {k: weapons[str(v)] for k, v in sub_rank.items()}
+    weapons = {k: WEAPONS[str(v)] for k, v in sub_rank.items()}
     return weapons
 
 
